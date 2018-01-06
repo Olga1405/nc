@@ -1,0 +1,157 @@
+<script>
+    $('#email').blur(function() {
+        if($(this).val() != '') {
+            var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+            if(pattern.test($(this).val())){
+                $(this).css({'border' : '1px solid #569b44'});
+                $("#add").removeClass('disabled');
+                $('#valid').text('Correct!');
+            } else {
+                $(this).css({'border' : '1px solid #ff0000'});
+                $('#valid').text('Please, enter correct email!');
+            }
+        }
+    });
+    $('#linkReverse #buttonForm').click(function(){
+    console.log('Вход в скрипт обратной связи')
+        var formData = {};
+        var url= $(this).parents('form').attr('action');
+        $('#linkReverse').serializeArray().map(function(x){formData[x.name] = x.value;});
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: formData,
+          success: function(data) {
+             var message = 'Сообщение отправлено';
+              console.log('Запрос на обратную связь отправлен')
+              $('#buttonForm').after('<div>' + message + '</div>');
+          },
+          error: function(xhr, str){
+              console.log('Возникла ошибка');
+              console.log('Возникла ошибка')
+              $('#buttonForm').after('<div>' + message + '</div>');
+          }
+      });
+      return false;
+  });
+
+    var $validPhone;
+    $(document).ready(function(){
+        $validPhone = $('div');
+        $validPhone.find('.user-phone').each(function(){
+            $(this).mask("+7 (999) 999-99-99",{autoclear: false});
+        });
+        $validPhone.on('keyup','.user-phone',function(){
+            var phone = $(this),
+                phoneVal = phone.val(),
+                form = $(this).parents('form');
+            if ( (phoneVal.indexOf("_") != -1) || phoneVal == '' ) {
+                form.find('#buttonForm').attr('disabled',true);
+            } else {
+                form.find('#buttonForm').removeAttr('disabled');
+            }
+        });
+    });
+
+    var addTime = document.getElementById('add');
+
+    addTime.addEventListener('click', getN);
+
+    function getN() {
+        var getNum = document.getElementById('email').value;
+        return getNum;
+    };
+
+    $('#linkMail .btn').click(function() {
+        console.log(111)
+            var formData = {};
+            var url = $(this).parents('form').attr('action');
+            formData['email'] = getN();
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                success: function () {
+                    console.log('Запрос на рассылку отправлен');
+                    var message = 'Запрос на рассылку отправлен';
+                    $('#add').after('<div>' + message + '</div>');
+                },
+                error: function (xhr, str) {
+                    console.log('Возникла ошибка');
+                    var message = 'Возникла ошибка';
+                    $('#add').after('<div>' + message + '</div>');
+                }
+            });
+    });
+    $("#add").addClass('disabled');
+</script>
+<div class="svayz text-font">
+    <div class="svayz-container">
+        <div class="advantages-txt">
+            <div class="capitalAbout">Get in touch</div>
+        </div>
+
+        <div class="svayz-txt">
+            <div class="svayz-block svayz-left">
+                <div class="adress">
+                    <i class="fa fa-address-book" aria-hidden="true"></i>
+                    <div class="adress-txt">
+                        <div class="caption-contact">	Adress	</div>
+                        <div class="keep"> Lorem ipsum dolor sit amet</div>
+                    </div>
+                </div>
+                <div class="mail">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <div class="mail-txt">
+                        <div class="caption-contact">	Mail</div>
+                        <div class="keep"> Lorem ipsum dolor sit amet</div>
+                    </div>
+                </div>
+                <div class="phone">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <div class="phone-txt">
+                        <div class="caption-contact">Phone</div>
+                        <div class="keep"> Lorem ipsum dolor sit amet</div>
+                    </div>
+                </div>
+                <div class="infoMail">
+                    <form action="/clientFormSub" id="linkMail" method="post">
+                        <b>Email:</b><input size="25" name="mail"  id="email" type="text" placeholder="You mail"  value="" >
+                        <div id="add" class="btn txtSubscribe"> I want to subscribe!</div>
+                        <span id="valid"></span>
+                    </form>
+                </div>
+            </div>
+            <div class="svayz-block svayz-right">
+                <form action="/clientFormSub2" id="linkReverse" method="post">
+                    <p><b>Name:</b><br><input id="name" name="nameUser" type="text" size="25" placeholder="Your name" required></p>
+                    <p><b>Telephone*:</b><br>
+                        <div class="user_phone">
+                            <input type="tel" name="telephone" required placeholder="+7 (___) ___-__-__" id="user_phone" class="user-phone" title="+7 (999) 999 99 99"/>
+                        </div>
+                    </p>
+                    <p><b>Adress:</b><br><input size="25" name="adressUser" placeholder="You adress"></p> <!-- value="iv.olga140595@gmail.com"-->
+                    <p><b>Comment:</b><br> <textarea name="commentUser" rows="4" size="25" class ="text1" placeholder="You comment"></textarea></p>
+                    <div class="otpravka">
+                        <input type="submit" id="buttonForm" class="otpravkaTxt" disabled />
+                        <div class="send-txt">	*required fields.</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contacts text-font">
+    <div class="contacts-container">
+        <div class="footer-icon">
+            <div class="footer-icon-holder">
+                <div class="g-holder asd asd-1" data-description="google"><i class="fa fa-google-plus" aria-hidden="true"></i></div>
+                <div class="tw-holder asd asd-1" data-description="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></div>
+                <div class="fb-holder asd" data-description="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></div>
+            </div>
+            <div class="footer-txt"><a href="#" class="footer-a">HOTEL</a> © 2017 . <a href="#" class="footer-privacy">PRIVACY POLICY</a></div>
+        </div>
+
+    </div>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d197884.59303761675!2d43.323631521284916!3d56.22386123239987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2sru!4v1501604946056" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+</div>
