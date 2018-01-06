@@ -5,11 +5,11 @@ var nodemailer = require("nodemailer");
 var xoauth2 = require("xoauth2");
 app.use(bodyParser.json());
 
-app.use('/clientFormSub', bodyParser.urlencoded({
+app.use('/clientFormMail', bodyParser.urlencoded({
     extended: true
 }));
 
-app.post('/clientFormSub', function(req, res, next) {
+app.post('/clientFormMail', function(req, res, next) {
     console.dir(req.body);
     smtpTransport = nodemailer.createTransport({
         service: 'Gmail',
@@ -39,7 +39,7 @@ app.post('/clientFormSub', function(req, res, next) {
     return true;
 });
 
-app.post('/clientFormSub2', function (req, res) {
+app.post('/clientFormReverse', function (req, res) {
     console.log("Your POST request:" + req.body.toString());
     res.send({
         status: "New",
